@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: notificacao-service
+
+  # Configuração do RabbitMQ (para OUVIR)
+  rabbitmq:
+    host: localhost # Quando rodamos local, acessamos o Docker via localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  # Configuração do E-mail (para FALAR com o MailHog)
+  mail:
+    host: localhost
+    port: 1025 # Porta SMTP do MailHog
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false

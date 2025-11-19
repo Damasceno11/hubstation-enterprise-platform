@@ -1,0 +1,90 @@
+services:
+  # ----------------------------------------
+  # SERVIÇO 1: BANCO DE DADOS
+  # ----------------------------------------
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: sistema-postgres-db
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ----------------------------------------
+  # SERVIÇO 2: API PRINCIPAL
+  # ----------------------------------------
+  api:
+    # IMPORTANTE: Aponta para a pasta da API
+    build: ./sistema-posto-api 
+    container_name: sistema-posto-api
+    restart: on-failure
+    depends_on:
+      - postgres-db
+      - rabbitmq # Depende do RabbitMQ para iniciar
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${APP_DB_PASSWORD}
+      - SPRING_SECURITY_USER_NAME=${APP_SECURITY_USER}
+      - SPRING_SECURITY_USER_PASSWORD=${APP_SECURITY_PASSWORD}
+      # NOVIDADE: Variáveis do RabbitMQ
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    ports:
+      - "8080:8080"
+
+  # ----------------------------------------
+  # SERVIÇO 3: MENSAGERIA
+  # ----------------------------------------
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: sistema-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"  # Porta da API
+      - "15672:15672" # Porta da Interface Web (Management)
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  # ----------------------------------------
+  # SERVIÇO 4: CAPTURA DE E-MAIL (O "Pulo do Gato")
+  # ----------------------------------------
+  mailhog:
+    image: mailhog/mailhog
+    container_name: sistema-mailhog
+    restart: always
+    ports:
+      - "1025:1025" # Porta SMTP (para onde o Java envia)
+      - "8025:8025" # Porta HTTP (Caixa de entrada que você acessa)
+
+
+  # ----------------------------------------
+  # SERVIÇO 5: NOTIFICAÇÃO (O que acabamos de criar)
+  # ----------------------------------------
+  notificacao:
+    build: ./notificacao-service # Aponta para a nova pasta
+    container_name: sistema-notificacao-api
+    restart: on-failure
+    depends_on:
+      - rabbitmq # Só inicia depois do RabbitMQ
+      - mailhog  # Só inicia depois do MailHog
+    environment:
+      # Diz ao serviço para encontrar os containers pelos nomes de serviço
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_MAIL_HOST=mailhog
+    ports:
+      - "8081:8081"
+
+# ----------------------------------------
+# BLOCO DE VOLUMES (NÍVEL SUPERIOR 2)
+# ----------------------------------------
+volumes:
+  postgres_data:
