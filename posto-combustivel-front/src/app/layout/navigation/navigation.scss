@@ -3,36 +3,38 @@
 }
 
 .sidenav {
-  width: 220px;
+  width: 240px;
   background: #fff; /* Fundo branco para o menu */
   border-right: none;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
 
   .mat-toolbar {
     background: transparent;
     color: #3f51b5;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 1.2rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
+    gap: 10px;
   }
 }
 
 /* Estilo dos Itens do Menu */
 .mat-mdc-nav-list {
-  padding-top: 10px;
+  padding-top: 16px;
 
   a {
-    margin: 5px 10px;
+    margin: 4px 12px;
     border-radius: 8px; /* Bordas arredondadas nos itens */
     color: #546e7a;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
+    height: 48px;
 
     &.active-link {
-      background-color: #e8eaf6; /* Fundo roxo bem claro */
-      color: #3f51b5; /* Texto roxo */
-      font-weight: 500;
+      background-color: #e8eaf6;
+      color: #3f51b5;
+      font-weight: 600;
 
       mat-icon {
         color: #3f51b5;
@@ -45,15 +47,28 @@
     }
 
     mat-icon {
-      margin-right: 12px;
+      margin-right: 18px;
       color: #78909c;
     }
   }
+
+  // Estilo para o separador (mat-divider)
+  mat-divider {
+    margin: 16px 0;
+    border-top-color: rgba(0, 0, 0, 0.06);
+  }
+}
+
+// --- CONTEÚDO PRINCIPAL (Correção do Footer) ---
+.mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Garante altura mínima total
 }
 
 /* Barra Superior (Header) */
 .mat-toolbar.mat-primary {
-  background: #3f51b5; /* Cor Primária (Deep Purple) */
+  background: #3f51b5;
   background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%); /* Gradiente Moderno */
   color: white;
   box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3); /* Sombra colorida */
@@ -61,11 +76,15 @@
   top: 0;
   z-index: 2;
   border-radius: 0 0 16px 16px; /* Arredondar apenas embaixo (opcional, estilo app mobile) */
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
-.content-padding {
-  padding: 24px;
-  max-width: 1200px;
+/* Wrapper do conteúdo que empurra o footer */
+.content-wrapper {
+  flex: 1; // O PULO DO GATO: Faz essa div ocupar todo o espaço sobrando
+  padding: 30px;
+  width: 100%;
+  max-width: 1400px; // Limita largura em monitores gigantes
   margin: 0 auto;
+  box-sizing: border-box;
 }

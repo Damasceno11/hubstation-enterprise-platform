@@ -7,26 +7,33 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar>⛽ Posto Gestão</mat-toolbar>
+    <mat-toolbar>⛽ Hub BR Gestão</mat-toolbar>
+
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Dashboard</span>
       </a>
-      <a mat-list-item routerLink="/combustiveis">
+      <a mat-list-item routerLink="/fidelidade" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>loyalty</mat-icon>
+        <span matListItemTitle>Fidelidade</span>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/combustiveis" routerLinkActive="active-link">
         <mat-icon matListItemIcon>local_gas_station</mat-icon>
         <span matListItemTitle>Combustíveis</span>
       </a>
-      <a mat-list-item routerLink="/bombas">
+      <a mat-list-item routerLink="/bombas" routerLinkActive="active-link">
         <mat-icon matListItemIcon>ev_station</mat-icon>
         <span matListItemTitle>Bombas</span>
       </a>
-      <a mat-list-item routerLink="/abastecimentos">
+      <a mat-list-item routerLink="/abastecimentos" routerLinkActive="active-link">
         <mat-icon matListItemIcon>receipt_long</mat-icon>
         <span matListItemTitle>Abastecimentos</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       @if (isHandset$ | async) {
@@ -34,12 +41,19 @@
         <mat-icon>menu</mat-icon>
       </button>
       }
-      <span class="spacer">Sistema de Postos de Combustiveis</span>
-      <span style="font-size: 1rem; opacity: 1">Admin User</span>
-      <mat-icon style="margin-left: 12px">account_circle</mat-icon>
+      <span>Sistema de Postos Integrado</span>
+      <span class="spacer"></span>
+
+      <div style="display: flex; align-items: center; font-size: 14px">
+        <span style="margin-right: 10px; opacity: 0.9">Admin User</span>
+        <mat-icon>account_circle</mat-icon>
+      </div>
     </mat-toolbar>
-    <div class="content-padding">
+
+    <div class="content-wrapper">
       <router-outlet></router-outlet>
     </div>
+
+    <app-footer></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>

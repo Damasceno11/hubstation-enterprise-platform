@@ -1,0 +1,37 @@
+.app-footer {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-radius: 16px 16px 0 0;
+
+  /* Estilo Azul/Roxo (Igual à Toolbar) */
+  background: #3f51b5;
+  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+  color: white; /* Texto branco para contrastar */
+
+  border-top: none;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Sombra invertida (para cima) */
+  font-size: 0.85rem;
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* Alinha com o conteúdo da página */
+    margin: 0 auto;
+
+    /* Ajuste a opacidade para ficar elegante */
+    span {
+      opacity: 0.9;
+    }
+
+    strong {
+      font-weight: 500;
+      color: #ffca28; /* Destaque em amarelo (Amber) para combinar com o tema */
+      font-size: 0.9rem;
+    }
+  }
+
+  .footer-name {
+    margin-right: 750px;
+  }
+}

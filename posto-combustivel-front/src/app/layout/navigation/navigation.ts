@@ -1,13 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { map, Observable, shareReplay } from 'rxjs';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-navigation',
@@ -19,8 +20,11 @@ import { map, Observable, shareReplay } from 'rxjs';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    AsyncPipe,
     RouterLink,
+    RouterLinkActive,
     RouterOutlet,
+    Footer,
   ],
   templateUrl: './navigation.html',
   styleUrl: './navigation.scss',
