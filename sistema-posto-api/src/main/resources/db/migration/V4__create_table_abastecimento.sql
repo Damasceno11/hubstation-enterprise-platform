@@ -18,3 +18,6 @@ ALTER TABLE public.abastecimento
 ALTER TABLE public.abastecimento
     ADD CONSTRAINT FK_ABASTECIMENTO_ON_CLIENTE
         FOREIGN KEY (cliente_id) REFERENCES public.cliente (id);
+
+CREATE INDEX idx_abastecimento_data ON public.abastecimento(data_abastecimento);
+CREATE INDEX idx_abastecimento_cliente ON public.abastecimento(cliente_id);

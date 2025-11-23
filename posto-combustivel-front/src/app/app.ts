@@ -4,7 +4,7 @@ import { Navigation } from './layout/navigation/navigation';
 
 @Component({
   selector: 'app-root',
-  imports: [Navigation],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

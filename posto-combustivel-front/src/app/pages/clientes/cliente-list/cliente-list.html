@@ -1,0 +1,101 @@
+<div class="page-container">
+  <!-- Header com Busca Integrada -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Base de Clientes</h1>
+      <p class="subtitle">Gestão de membros e fidelidade</p>
+    </div>
+
+    <div class="header-actions">
+      <!-- Campo de Busca Moderno -->
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Buscar por Nome ou CPF..." />
+      </mat-form-field>
+
+      <!-- Botão Adicionar -->
+      <button mat-flat-button color="primary" routerLink="/fidelidade">
+        <mat-icon>person_add</mat-icon>
+        Novo Cliente
+      </button>
+    </div>
+  </div>
+
+  <!-- Card da Tabela -->
+  <mat-card class="table-card">
+    @if (dataSource.data.length === 0) {
+    <div class="empty-state">
+      <mat-icon>groups</mat-icon>
+      <p>Nenhum cliente encontrado na base.</p>
+    </div>
+    } @else {
+    <table mat-table [dataSource]="dataSource" class="hub-table">
+      <!-- ID -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef class="w-80">ID</th>
+        <td mat-cell *matCellDef="let e" class="text-muted">#{{ e.id }}</td>
+      </ng-container>
+
+      <!-- Nome (Destaque com Avatar) -->
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+        <td mat-cell *matCellDef="let e">
+          <div class="client-info">
+            <div class="avatar-placeholder">{{ e.nome.charAt(0).toUpperCase() }}</div>
+            <span class="client-name">{{ e.nome }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- CPF -->
+      <ng-container matColumnDef="cpf">
+        <th mat-header-cell *matHeaderCellDef>CPF</th>
+        <td mat-cell *matCellDef="let e" class="text-mono">{{ e.cpf }}</td>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Contato</th>
+        <td mat-cell *matCellDef="let e" class="text-secondary">{{ e.email }}</td>
+      </ng-container>
+
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let e">
+          <!-- Exemplo de lógica visual: Se tiver ID, é fidelidade -->
+          <span class="status-badge fidelidade">
+            <mat-icon class="tiny-icon">verified</mat-icon>
+            Fidelidade
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Ações (Faltava no original) -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="w-actions text-right">Ações</th>
+        <td mat-cell *matCellDef="let e" class="text-right">
+          <div class="action-buttons">
+            <button class="soft-btn edit-btn" matTooltip="Editar Dados">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="soft-btn delete-btn" matTooltip="Remover">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover-row"></tr>
+
+      <!-- Linha "Sem Resultados" para o Filtro -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell empty-search" colspan="6">
+          Nenhum resultado correspondente ao filtro.
+        </td>
+      </tr>
+    </table>
+    }
+  </mat-card>
+</div>

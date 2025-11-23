@@ -1,0 +1,88 @@
+// Variáveis do Tema HubStation
+$primary-blue: #1976d2;
+$primary-light: #e3f2fd;
+$text-primary: #37474f;
+$text-secondary: #78909c;
+
+:host {
+  display: block;
+  background: #fff;
+}
+
+// Header
+.dialog-header {
+  padding: 24px 24px 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+  .icon-badge {
+    width: 48px;
+    height: 48px;
+    background-color: #fff3e0; // Laranja suave para Bombas (diferenciar de combustivel)
+    color: #ef6c00; // Laranja forte
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .header-text {
+    .title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-primary;
+    }
+    .subtitle {
+      margin: 0;
+      font-size: 0.85rem;
+      color: $text-secondary;
+    }
+  }
+}
+
+// Form
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 24px;
+}
+
+.full-width {
+  width: 100%;
+  .input-icon {
+    color: #cfd8dc;
+  }
+}
+
+// Estilo das opções do Select
+.option-label {
+  font-weight: 500;
+  color: $text-primary;
+}
+.option-price {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: #2e7d32; // Verde preço
+  background: #e8f5e9;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+// Footer Actions
+.dialog-actions {
+  padding: 16px 24px 24px 24px;
+
+  .cancel-btn {
+    color: $text-secondary;
+  }
+}

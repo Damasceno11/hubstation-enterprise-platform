@@ -1,37 +1,102 @@
+// Variáveis locais (ou importadas do seu tema)
+$footer-bg: #ffffff;
+$text-primary: #37474f;
+$text-light: #90a4ae;
+$border-color: rgba(0, 0, 0, 0.06);
+$status-ok: #4caf50; // Verde sucesso
+
 .app-footer {
-  margin-top: auto;
-  padding: 16px 24px;
-  border-radius: 16px 16px 0 0;
-
-  /* Estilo Azul/Roxo (Igual à Toolbar) */
-  background: #3f51b5;
-  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
-  color: white; /* Texto branco para contrastar */
-
-  border-top: none;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Sombra invertida (para cima) */
-  font-size: 0.85rem;
+  flex-shrink: 0; // Não deixa o footer esmagar
+  height: 56px; // Altura padrão Material
+  background-color: $footer-bg;
+  border-top: 1px solid $border-color; // Linha sutil no topo para separar do conteúdo
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  z-index: 5; // Garante que fique acima de elementos decorativos se houver
 
   .footer-content {
+    width: 100%;
+    max-width: 1400px; // Alinhado com a largura do conteúdo da Dashboard
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px; /* Alinha com o conteúdo da página */
-    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8rem;
+  }
 
-    /* Ajuste a opacidade para ficar elegante */
-    span {
-      opacity: 0.9;
-    }
+  // --- LADO ESQUERDO ---
+  .footer-left {
+    display: flex;
+    align-items: center;
+    color: $text-primary;
 
     strong {
-      font-weight: 500;
-      color: #ffca28; /* Destaque em amarelo (Amber) para combinar com o tema */
-      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1976d2; // Azul da marca no nome
+    }
+
+    .divider {
+      margin: 0 8px;
+      color: $border-color;
+    }
+
+    .tagline {
+      color: $text-light;
+      font-weight: 400;
     }
   }
 
-  .footer-name {
-    margin-right: 750px;
+  // --- LADO DIREITO ---
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    // Indicador de Status (Toque Profissional)
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: help; // Muda o cursor para interrogação/ajuda
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background-color: $status-ok;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px rgba($status-ok, 0.2); // Efeito de 'pulse' estático
+      }
+
+      .status-text {
+        color: $text-light;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+    }
+
+    .version-badge {
+      background-color: #f5f5f5;
+      color: $text-light;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.7rem;
+      border: 1px solid $border-color;
+    }
+  }
+
+  // --- RESPONSIVIDADE ---
+  @media (max-width: 600px) {
+    .tagline,
+    .system-status .status-text {
+      display: none; // Simplifica no mobile
+    }
+
+    .footer-content {
+      font-size: 0.75rem;
+    }
   }
 }

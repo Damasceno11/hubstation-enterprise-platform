@@ -1,0 +1,229 @@
+// Variáveis do Tema
+$primary-blue: #1976d2;
+$text-primary: #37474f;
+$text-secondary: #78909c;
+$bg-page: #f5f7fa;
+
+.page-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; // Alinha base do texto com os botões
+    margin-bottom: 32px;
+    flex-wrap: wrap; // Permite quebrar em mobile
+    gap: 16px;
+
+    .header-content {
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0 0 4px 0;
+      }
+      .subtitle {
+        color: $text-secondary;
+        margin: 0;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      // Estilo do Campo de Busca
+      .search-field {
+        width: 280px;
+        font-size: 0.9rem;
+
+        // Hackzinho elegante para deixar o input branco puro
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          background-color: white !important;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+}
+
+.table-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  background: #fff;
+}
+
+.hub-table {
+  width: 100%;
+
+  th.mat-header-cell {
+    background-color: #fafafa;
+    color: $text-secondary;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  td.mat-cell {
+    padding: 16px 24px;
+    color: $text-primary;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  tr.hover-row:hover {
+    background-color: #f5f9ff;
+  }
+
+  // --- Coluna Nome com Avatar ---
+  .client-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .avatar-placeholder {
+      width: 32px;
+      height: 32px;
+      background-color: #e3f2fd;
+      color: $primary-blue;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .client-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+  }
+
+  .text-mono {
+    font-family: monospace;
+    color: $text-secondary;
+    letter-spacing: 0.5px;
+  }
+  .text-secondary {
+    color: $text-secondary;
+  }
+  .text-muted {
+    color: #b0bec5;
+    font-family: monospace;
+  }
+
+  // Badge Fidelidade
+  .status-badge.fidelidade {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #e8f5e9; // Verde suave para "Ativo"
+    color: #2e7d32;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(46, 125, 50, 0.1);
+
+    .tiny-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  .empty-search {
+    text-align: center;
+    padding: 24px;
+    color: $text-secondary;
+    font-style: italic;
+  }
+
+  .w-80 {
+    width: 80px;
+  }
+  .w-actions {
+    width: 100px;
+  }
+  .text-right {
+    text-align: right;
+    justify-content: flex-end;
+  }
+}
+
+// --- Soft Buttons ---
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.soft-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &.edit-btn {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    &:hover {
+      background-color: darken(#e3f2fd, 5%);
+      transform: translateY(-2px);
+    }
+  }
+
+  &.delete-btn {
+    background-color: #ffebee;
+    color: #c62828;
+    &:hover {
+      background-color: darken(#ffebee, 5%);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.empty-state {
+  padding: 60px;
+  text-align: center;
+  color: $text-secondary;
+  mat-icon {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    opacity: 0.4;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+    .search-field {
+      flex: 1;
+    }
+  }
+}

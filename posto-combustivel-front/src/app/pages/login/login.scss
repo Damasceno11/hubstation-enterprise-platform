@@ -1,0 +1,143 @@
+// Variáveis do Tema (Consistência com o resto do app)
+$primary-blue: #1976d2;
+$bg-page: #f5f7fa;
+$text-primary: #37474f;
+$text-secondary: #78909c;
+
+.login-container {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $bg-page; // Fundo limpo
+  padding: 20px;
+
+  // Marca acima do card
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    color: $primary-blue;
+
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
+
+    span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $text-primary;
+      letter-spacing: -0.5px;
+    }
+  }
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px; // Largura confortável
+  padding: 32px 24px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08); // Sombra moderna
+  border: 1px solid rgba(0, 0, 0, 0.02);
+
+  // Cabeçalho do Card
+  .custom-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center; // Centraliza texto
+    margin-bottom: 24px;
+    padding: 0; // Remove padding padrão do Material se necessário
+
+    mat-card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin-bottom: 8px;
+    }
+
+    mat-card-subtitle {
+      font-size: 0.9rem;
+      color: $text-secondary;
+    }
+  }
+
+  // Inputs
+  .full-width {
+    width: 100%;
+    margin-bottom: 12px;
+
+    .input-icon {
+      color: #b0bec5;
+    }
+  }
+
+  // Botão
+  .actions {
+    margin-top: 16px;
+
+    .login-btn {
+      width: 100%;
+      height: 48px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: transform 0.2s;
+
+      &:hover:not([disabled]) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba($primary-blue, 0.2);
+      }
+    }
+  }
+
+  // Footer do Card
+  .card-footer {
+    text-align: center;
+    padding-top: 24px;
+    padding-bottom: 0;
+
+    .forgot-link {
+      color: $text-secondary;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $primary-blue;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Rodapé da Página (Copyright)
+.page-footer {
+  margin-top: 40px;
+  color: #b0bec5;
+  font-size: 0.8rem;
+}
+
+// Loader Simples
+.spinner-mini {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

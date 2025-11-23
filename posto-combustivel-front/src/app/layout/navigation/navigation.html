@@ -1,4 +1,5 @@
 <mat-sidenav-container class="sidenav-container">
+  <!-- MENU LATERAL (Sempre visível neste layout) -->
   <mat-sidenav
     #drawer
     class="sidenav"
@@ -7,52 +8,98 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar>⛽ Hub BR Gestão</mat-toolbar>
+    <div class="brand-container">
+      <div class="logo-icon">
+        <mat-icon>local_gas_station</mat-icon>
+      </div>
+      <span class="brand-name">HubStation</span>
+    </div>
 
     <mat-nav-list>
+      <div class="nav-subheader">Visão Geral</div>
       <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <mat-icon matListItemIcon>analytics</mat-icon>
         <span matListItemTitle>Dashboard</span>
       </a>
-      <a mat-list-item routerLink="/fidelidade" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>loyalty</mat-icon>
-        <span matListItemTitle>Fidelidade</span>
-      </a>
-      <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/combustiveis" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>local_gas_station</mat-icon>
-        <span matListItemTitle>Combustíveis</span>
+
+      <mat-divider class="group-divider"></mat-divider>
+
+      <div class="nav-subheader">Operacional</div>
+      <a mat-list-item routerLink="/abastecimentos" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>point_of_sale</mat-icon>
+        <span matListItemTitle>Vendas & Caixa</span>
       </a>
       <a mat-list-item routerLink="/bombas" routerLinkActive="active-link">
         <mat-icon matListItemIcon>ev_station</mat-icon>
-        <span matListItemTitle>Bombas</span>
+        <span matListItemTitle>Bombas & Terminais</span>
       </a>
-      <a mat-list-item routerLink="/abastecimentos" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>receipt_long</mat-icon>
-        <span matListItemTitle>Abastecimentos</span>
+
+      <mat-divider class="group-divider"></mat-divider>
+
+      <div class="nav-subheader">Gestão & Estoque</div>
+      <a mat-list-item routerLink="/combustiveis" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>oil_barrel</mat-icon>
+        <span matListItemTitle>Tanques & Estoque</span>
+      </a>
+      <a mat-list-item routerLink="/clientes" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>groups</mat-icon>
+        <span matListItemTitle>Base de Clientes</span>
+      </a>
+      <a mat-list-item routerLink="/fidelidade" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>stars</mat-icon>
+        <span matListItemTitle>Clube Fidelidade</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
+  <!-- CONTEÚDO DA ROTA FILHA -->
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar class="main-toolbar">
       @if (isHandset$ | async) {
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+      <button type="button" mat-icon-button (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
       }
-      <span>Sistema de Postos Integrado</span>
+
+      <span class="toolbar-title">Gestão Integrada</span>
       <span class="spacer"></span>
 
-      <div style="display: flex; align-items: center; font-size: 14px">
-        <span style="margin-right: 10px; opacity: 0.9">Admin User</span>
-        <mat-icon>account_circle</mat-icon>
-      </div>
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-profile-pill">
+        <div class="pill-content">
+          <div class="avatar-circle">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div class="text-col">
+            <span class="user-name">Admin User</span>
+            <span class="user-role">Gerente</span>
+          </div>
+          <mat-icon class="dropdown-arrow">expand_more</mat-icon>
+        </div>
+      </button>
+
+      <mat-menu #userMenu="matMenu" xPosition="before" class="custom-user-menu">
+        <button mat-menu-item disabled>
+          <mat-icon>badge</mat-icon>
+          <span>Meu Perfil</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>settings</mat-icon>
+          <span>Configurações</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon color="warn">logout</mat-icon>
+          <span>Sair do Sistema</span>
+        </button>
+      </mat-menu>
     </mat-toolbar>
 
-    <div class="content-wrapper">
-      <router-outlet></router-outlet>
-    </div>
+    <main class="content-wrapper">
+      <div class="content-limit">
+        <!-- AQUI SÃO RENDERIZADAS AS ROTAS FILHAS (Dashboard, etc) -->
+        <router-outlet></router-outlet>
+      </div>
+    </main>
 
     <app-footer></app-footer>
   </mat-sidenav-content>

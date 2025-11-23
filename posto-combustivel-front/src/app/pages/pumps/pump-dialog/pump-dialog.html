@@ -1,0 +1,57 @@
+<!-- Header Customizado -->
+<div class="dialog-header">
+  <div class="icon-badge">
+    <mat-icon>{{ data ? 'edit_square' : 'ev_station' }}</mat-icon>
+  </div>
+  <div class="header-text">
+    <h2 class="title">{{ data ? 'Editar' : 'Nova' }} Bomba</h2>
+    <p class="subtitle">Configure o ponto de abastecimento</p>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <!-- Nome da Bomba -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Identificação (Nome)</mat-label>
+      <input
+        matInput
+        formControlName="nome"
+        placeholder="Ex: Bomba 04 - Ilha 2"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix class="input-icon">qr_code</mat-icon>
+
+      @if (form.get('nome')?.hasError('required')) {
+      <mat-error>Nome é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Select de Combustível -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Combustível Vinculado</mat-label>
+      <mat-select formControlName="tipoCombustivelId" placeholder="Selecione o tipo">
+        @for (fuel of fuelTypes; track fuel.id) {
+        <mat-option [value]="fuel.id">
+          <span class="option-label">{{ fuel.nome }}</span>
+          <span class="option-price">{{ fuel.precoLitro | currency : 'BRL' }}</span>
+        </mat-option>
+        }
+      </mat-select>
+      <mat-icon matSuffix class="input-icon">water_drop</mat-icon>
+
+      @if (form.get('tipoCombustivelId')?.hasError('required')) {
+      <mat-error>É necessário vincular um combustível</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<!-- Ações -->
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button (click)="onCancel()" class="cancel-btn">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="onSave()" [disabled]="form.invalid">
+    <mat-icon>check</mat-icon>
+    Salvar Configuração
+  </button>
+</mat-dialog-actions>

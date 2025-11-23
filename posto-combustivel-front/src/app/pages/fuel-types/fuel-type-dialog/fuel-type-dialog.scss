@@ -1,0 +1,72 @@
+// Variáveis do Tema
+$primary-blue: #1976d2;
+$primary-light: #e3f2fd;
+$text-primary: #37474f;
+$text-secondary: #78909c;
+
+// Remove padding padrão do topo para customizar header
+:host {
+  display: block;
+  background: #fff;
+}
+
+.dialog-header {
+  padding: 24px 24px 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+  .icon-badge {
+    width: 48px;
+    height: 48px;
+    background-color: $primary-light;
+    color: $primary-blue;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .header-text {
+    .title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text-primary;
+    }
+    .subtitle {
+      margin: 0;
+      font-size: 0.85rem;
+      color: $text-secondary;
+    }
+  }
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 24px; // Espaço extra após o header
+}
+
+.full-width {
+  width: 100%;
+  .input-icon {
+    color: #cfd8dc;
+  }
+}
+
+.dialog-actions {
+  padding: 16px 24px 24px 24px; // Padding no rodapé
+
+  .cancel-btn {
+    color: $text-secondary;
+  }
+}

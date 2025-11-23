@@ -1,21 +1,18 @@
-# Etapa 1: Define a imagem base (Java 17 Alpine - Leve e Seguro)
-FROM eclipse-temurin:17-jdk-alpine
-
-# Define o diretório de trabalho dentro do container
+# Stage 1: Build
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
 WORKDIR /app
+COPY pom.xml .
+# Baixa dependências (cache layer)
+RUN mvn dependency:go-offline
+COPY src ./src
+# Compila pulando testes (testes devem rodar no CI/CD, não no build do container)
+RUN mvn clean package -DskipTests
 
-# Cria um usuário não-root para segurança (Prática Enterprise)
+# Stage 2: Runtime
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+# Cria usuário não-root por segurança
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
-
-# Argumento para localizar o arquivo .jar gerado pelo Maven
-ARG JAR_FILE=target/*.jar
-
-# Copia o jar da sua máquina para dentro do container renomeando para app.jar
-COPY ${JAR_FILE} app.jar
-
-# Expõe a porta 8080 (apenas documentação, o docker-compose é quem libera)
-EXPOSE 8080
-
-# Comando que executa a aplicação quando o container sobe
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

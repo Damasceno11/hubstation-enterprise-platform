@@ -1,90 +1,124 @@
 services:
-  # ----------------------------------------
-  # SERVIÇO 1: BANCO DE DADOS
-  # ----------------------------------------
+  # ------------------------------------------------------
+  # BANCO DE DADOS POSTGRESQL
+  # ------------------------------------------------------
   postgres-db:
     image: postgres:16-alpine
-    container_name: sistema-postgres-db
+    container_name: hubstation-db
     restart: always
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5433:5432"
+      - '5433:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hub-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # ----------------------------------------
-  # SERVIÇO 2: API PRINCIPAL
-  # ----------------------------------------
-  api:
-    # IMPORTANTE: Aponta para a pasta da API
-    build: ./sistema-posto-api 
-    container_name: sistema-posto-api
-    restart: on-failure
-    depends_on:
-      - postgres-db
-      - rabbitmq # Depende do RabbitMQ para iniciar
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/${POSTGRES_DB}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
-      - SPRING_DATASOURCE_PASSWORD=${APP_DB_PASSWORD}
-      - SPRING_SECURITY_USER_NAME=${APP_SECURITY_USER}
-      - SPRING_SECURITY_USER_PASSWORD=${APP_SECURITY_PASSWORD}
-      # NOVIDADE: Variáveis do RabbitMQ
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=guest
-      - SPRING_RABBITMQ_PASSWORD=guest
-    ports:
-      - "8080:8080"
-
-  # ----------------------------------------
-  # SERVIÇO 3: MENSAGERIA
-  # ----------------------------------------
+  # ------------------------------------------------------
+  # RABBITMQ
+  # ------------------------------------------------------
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: sistema-rabbitmq
+    container_name: hubstation-rabbitmq
     restart: always
     ports:
-      - "5672:5672"  # Porta da API
-      - "15672:15672" # Porta da Interface Web (Management)
+      - '5672:5672'
+      - '15672:15672'
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - hub-network
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', '-q', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # ----------------------------------------
-  # SERVIÇO 4: CAPTURA DE E-MAIL (O "Pulo do Gato")
-  # ----------------------------------------
+  # ------------------------------------------------------
+  # MAILHOG (mock de email)
+  # ------------------------------------------------------
   mailhog:
     image: mailhog/mailhog
-    container_name: sistema-mailhog
+    container_name: hubstation-mailhog
     restart: always
     ports:
-      - "1025:1025" # Porta SMTP (para onde o Java envia)
-      - "8025:8025" # Porta HTTP (Caixa de entrada que você acessa)
+      - '1025:1025'
+      - '8025:8025'
+    networks:
+      - hub-network
 
-
-  # ----------------------------------------
-  # SERVIÇO 5: NOTIFICAÇÃO (O que acabamos de criar)
-  # ----------------------------------------
-  notificacao:
-    build: ./notificacao-service # Aponta para a nova pasta
-    container_name: sistema-notificacao-api
+  # ------------------------------------------------------
+  # BACKEND PRINCIPAL (API SPRING BOOT)
+  # ------------------------------------------------------
+  api:
+    build: ./sistema-posto-api
+    container_name: hubstation-api
     restart: on-failure
     depends_on:
-      - rabbitmq # Só inicia depois do RabbitMQ
-      - mailhog  # Só inicia depois do MailHog
+      postgres-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
-      # Diz ao serviço para encontrar os containers pelos nomes de serviço
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_MAIL_HOST=mailhog
-    ports:
-      - "8081:8081"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
 
-# ----------------------------------------
-# BLOCO DE VOLUMES (NÍVEL SUPERIOR 2)
-# ----------------------------------------
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+
+    ports:
+      - '8080:8080'
+    networks:
+      - hub-network
+
+  # ------------------------------------------------------
+  # MICROSERVIÇO DE NOTIFICAÇÃO
+  # ------------------------------------------------------
+  notificacao:
+    build: ./notificacao-service
+    container_name: hubstation-notificacao
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_MAIL_HOST: mailhog
+      SPRING_MAIL_PORT: 1025
+    networks:
+      - hub-network
+
+  # ------------------------------------------------------
+  # FRONTEND (ANGULAR + NGINX)
+  # ------------------------------------------------------
+  frontend:
+    build: ./posto-combustivel-front
+    container_name: hubstation-front
+    restart: always
+    depends_on:
+      - api
+    ports:
+      - '4200:80'
+    networks:
+      - hub-network
+
 volumes:
   postgres_data:
+
+networks:
+  hub-network:
+    driver: bridge

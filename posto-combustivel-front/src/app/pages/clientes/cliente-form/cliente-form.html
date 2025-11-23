@@ -1,0 +1,92 @@
+<div class="page-container">
+  <mat-card class="cadastro-card">
+    <!-- HEADER INTERNO (Compacto e Bonito) -->
+    <div class="card-header-custom">
+      <div class="icon-badge">
+        <mat-icon>stars</mat-icon>
+      </div>
+      <div class="header-text">
+        <span class="title">HubStation Fidelidade</span>
+        <span class="subtitle">Novo cadastro de membro</span>
+      </div>
+    </div>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <!-- Campo Nome -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nome do Cliente</mat-label>
+          <input
+            matInput
+            formControlName="nome"
+            placeholder="Ex: Maria Silva"
+            autocomplete="name"
+          />
+          <mat-icon matSuffix class="input-icon">person</mat-icon>
+
+          @if (form.get('nome')?.hasError('required')) {
+          <mat-error>Nome é obrigatório</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Campo CPF -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>CPF (Somente números)</mat-label>
+          <input
+            matInput
+            formControlName="cpf"
+            placeholder="000.000.000-00"
+            maxlength="11"
+            inputmode="numeric"
+          />
+          <mat-icon matSuffix class="input-icon">badge</mat-icon>
+          <mat-hint align="end">{{ form.get('cpf')?.value?.length || 0 }} / 11</mat-hint>
+
+          @if (form.get('cpf')?.hasError('pattern')) {
+          <mat-error>CPF deve ter 11 dígitos</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Campo Email -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>E-mail</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            placeholder="cliente@email.com"
+            type="email"
+            autocomplete="email"
+          />
+          <mat-icon matSuffix class="input-icon">mail</mat-icon>
+
+          @if (form.get('email')?.hasError('email')) {
+          <mat-error>E-mail inválido</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Botão de Ação -->
+        <div class="form-actions">
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid || isLoading"
+            class="submit-btn"
+          >
+            @if (isLoading) {
+            <div class="loader-content">
+              <span class="spinner-mini"></span>
+              <span>Salvando...</span>
+            </div>
+            } @else {
+            <div class="btn-content">
+              <mat-icon>check</mat-icon>
+              <span>Confirmar Cadastro</span>
+            </div>
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

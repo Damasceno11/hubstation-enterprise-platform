@@ -1,0 +1,143 @@
+// Variáveis do Tema
+$primary-blue: #1976d2;
+$primary-light: #e3f2fd;
+$text-primary: #37474f;
+$text-secondary: #78909c;
+$bg-page: #f5f7fa;
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; // Centraliza verticalmente
+  // Ajuste fino: 100vh menos altura do header(70px) e footer(50px) aprox.
+  min-height: calc(80vh - 100px);
+  padding: 24px;
+  background-color: $bg-page;
+}
+
+.cadastro-card {
+  width: 100%;
+  max-width: 500px; // Largura ideal para leitura rápida
+  padding: 40px;
+  border-radius: 16px;
+  background: #ffffff;
+  // Sombra suave estilo "Elevation"
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+
+  // --- Header Interno ---
+  .card-header-custom {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); // Linha divisória sutil
+
+    .icon-badge {
+      width: 48px;
+      height: 48px;
+      background-color: $primary-light;
+      color: $primary-blue;
+      border-radius: 12px; // Quadrado arredondado (Moderno)
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+
+      .title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: $text-primary;
+        line-height: 1.2;
+      }
+      .subtitle {
+        font-size: 0.85rem;
+        color: $text-secondary;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  // --- Campos ---
+  .full-width {
+    width: 100%;
+    margin-bottom: 8px; // Espaçamento compacto
+
+    // Ícone cinza claro dentro do input
+    .input-icon {
+      color: #cfd8dc;
+    }
+  }
+
+  // --- Botão ---
+  .form-actions {
+    margin-top: 16px;
+
+    .submit-btn {
+      width: 100%;
+      height: 48px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+
+      &:hover:not([disabled]) {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba($primary-blue, 0.2);
+      }
+
+      .btn-content,
+      .loader-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+    }
+  }
+}
+
+// Loader puramente CSS (Simples e Leve)
+.spinner-mini {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsividade
+@media (max-width: 600px) {
+  .page-container {
+    padding: 16px;
+    align-items: flex-start; // No mobile, joga pro topo para teclado não cobrir
+    min-height: auto;
+  }
+
+  .cadastro-card {
+    padding: 20px;
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+}

@@ -1,90 +1,210 @@
+/* navigation.scss */
+$sidebar-width: 270px;
+$header-height: 70px;
+$primary-color: #1976d2;
+$bg-body: #f5f7fa;
+$text-primary: #37474f;
+$text-secondary: #78909c;
+
 .sidenav-container {
-  height: 100%;
+  height: 100vh;
+  background-color: $bg-body;
 }
 
+// --- SIDEBAR ---
 .sidenav {
-  width: 240px;
-  background: #fff; /* Fundo branco para o menu */
-  border-right: none;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+  width: $sidebar-width;
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
 
-  .mat-toolbar {
-    background: transparent;
-    color: #3f51b5;
-    font-weight: 700;
-    font-size: 1.2rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  .brand-container {
+    height: $header-height;
     display: flex;
     align-items: center;
-    gap: 10px;
-  }
-}
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 
-/* Estilo dos Itens do Menu */
-.mat-mdc-nav-list {
-  padding-top: 16px;
-
-  a {
-    margin: 4px 12px;
-    border-radius: 8px; /* Bordas arredondadas nos itens */
-    color: #546e7a;
-    transition: all 0.3s ease-in-out;
-    height: 48px;
-
-    &.active-link {
-      background-color: #e8eaf6;
-      color: #3f51b5;
-      font-weight: 600;
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, $primary-color, darken($primary-color, 15%));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: white;
 
       mat-icon {
-        color: #3f51b5;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
       }
     }
 
-    &:hover:not(.active-link) {
-      background-color: #f5f5f5;
-      transform: translateX(5px); /* Animação sutil ao passar o mouse */
-    }
-
-    mat-icon {
-      margin-right: 18px;
-      color: #78909c;
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-primary;
+      letter-spacing: -0.5px;
     }
   }
 
-  // Estilo para o separador (mat-divider)
-  mat-divider {
-    margin: 16px 0;
-    border-top-color: rgba(0, 0, 0, 0.06);
+  .mat-mdc-nav-list {
+    padding-top: 24px;
+
+    .nav-subheader {
+      padding: 0 24px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #b0bec5;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      margin-top: 16px;
+    }
+
+    .group-divider {
+      margin: 8px 24px;
+      border-color: rgba(0, 0, 0, 0.03);
+    }
+
+    a.mat-mdc-list-item {
+      margin: 4px 12px;
+      border-radius: 8px;
+      height: 46px;
+      color: $text-secondary;
+      transition: all 0.2s ease;
+
+      mat-icon {
+        color: #90a4ae;
+        margin-right: 16px;
+      }
+
+      &:hover {
+        background-color: #f5f5f5;
+        color: $text-primary;
+      }
+
+      &.active-link {
+        background-color: rgba($primary-color, 0.08);
+        color: $primary-color;
+        font-weight: 600;
+        mat-icon {
+          color: $primary-color;
+        }
+      }
+    }
   }
 }
 
-// --- CONTEÚDO PRINCIPAL (Correção do Footer) ---
+// --- CONTEÚDO E TOOLBAR ---
 .mat-sidenav-content {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; // Garante altura mínima total
+  min-height: 100vh; // Garante que o footer vá pro final
+  background-color: $bg-body;
 }
 
-/* Barra Superior (Header) */
-.mat-toolbar.mat-primary {
-  background: #3f51b5;
-  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%); /* Gradiente Moderno */
-  color: white;
-  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3); /* Sombra colorida */
+.main-toolbar {
+  height: $header-height;
+  background: #ffffff;
+  color: $text-primary;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
   position: sticky;
   top: 0;
-  z-index: 2;
-  border-radius: 0 0 16px 16px; /* Arredondar apenas embaixo (opcional, estilo app mobile) */
-  margin-bottom: 12px;
+  z-index: 10;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+
+  .toolbar-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: $text-secondary;
+    margin-left: 8px;
+  }
+
+  // --- CORREÇÃO DO BOTÃO DE PERFIL ---
+  .user-profile-pill {
+    height: auto; // Permite que o botão cresça se necessário
+    min-height: 44px;
+    padding: 4px 8px 4px 4px; // Padding interno ajustado
+    border-radius: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: all 0.2s;
+
+    // Container interno flexível
+    .pill-content {
+      display: flex;
+      align-items: center;
+      gap: 10px; // Espaço entre ícone, texto e seta
+    }
+
+    &:hover {
+      background-color: #fafafa;
+      border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .avatar-circle {
+      width: 34px;
+      height: 34px;
+      background-color: #e3f2fd;
+      color: $primary-color;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0; // Impede que o avatar amasse
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .text-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; // Alinha texto à esquerda
+      justify-content: center;
+      line-height: 1.2;
+      text-align: left; // Força alinhamento à esquerda
+
+      .user-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $text-primary;
+        white-space: nowrap;
+      }
+      .user-role {
+        font-size: 0.7rem;
+        color: $text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .dropdown-arrow {
+      color: #b0bec5;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      margin-left: 4px;
+    }
+  }
 }
 
-/* Wrapper do conteúdo que empurra o footer */
 .content-wrapper {
-  flex: 1; // O PULO DO GATO: Faz essa div ocupar todo o espaço sobrando
-  padding: 30px;
-  width: 100%;
-  max-width: 1400px; // Limita largura em monitores gigantes
-  margin: 0 auto;
-  box-sizing: border-box;
+  flex: 1; // Empurra o footer para baixo
+  overflow-y: auto;
+  padding: 24px;
+
+  .content-limit {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
 }

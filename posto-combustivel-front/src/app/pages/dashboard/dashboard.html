@@ -1,51 +1,98 @@
-<div class="page-title">
-  <mat-icon>analytics</mat-icon>
-  Dashboard Geral
-</div>
+<div class="dashboard-container">
+  <!-- CABEÇALHO DA PÁGINA -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Visão Geral</h1>
+      <p class="subtitle">Acompanhe o desempenho do seu Hub em tempo real</p>
+    </div>
+    <!-- Opcional: Botão de atualizar ou data -->
+    <div class="header-actions">
+      <span class="date-badge">{{ now | date : 'dd MMM yyyy' }}</span>
+    </div>
+  </div>
 
-<div class="stats-grid">
-  <mat-card class="stat-card purple-gradient">
-    <mat-card-content>
-      <div class="stat-header">
-        <mat-icon>local_gas_station</mat-icon>
-        <span>Combustíveis</span>
+  <!-- GRID DE MÉTRICAS (CARDS) -->
+  <div class="stats-grid">
+    <!-- Card 1: Combustíveis (Roxo/Indigo) -->
+    <mat-card class="stat-card type-fuel">
+      <div class="card-icon-wrapper">
+        <mat-icon>oil_barrel</mat-icon>
+        <!-- Ícone mais específico -->
       </div>
-      <div class="stat-value">3 Tipos</div>
-      <div class="stat-footer">Cadastrados</div>
-    </mat-card-content>
-  </mat-card>
+      <div class="card-content">
+        <span class="stat-label">Tanques & Estoque</span>
+        <span class="stat-value">{{ stats.qtdCombustiveis }}</span>
+        <span class="stat-footer">Tipos Disponíveis</span>
+      </div>
+    </mat-card>
 
-  <mat-card class="stat-card orange-gradient">
-    <mat-card-content>
-      <div class="stat-header">
+    <!-- Card 2: Bombas/Eletropostos (Laranja) -->
+    <mat-card class="stat-card type-pump">
+      <div class="card-icon-wrapper">
         <mat-icon>ev_station</mat-icon>
-        <span>Bombas Ativas</span>
       </div>
-      <div class="stat-value">8 Unid.</div>
-      <div class="stat-footer">Em operação</div>
-    </mat-card-content>
-  </mat-card>
+      <div class="card-content">
+        <span class="stat-label">Bombas & Terminais</span>
+        <span class="stat-value">{{ stats.qtdBombas }}</span>
+        <span class="stat-footer">Unidades Ativas</span>
+      </div>
+    </mat-card>
 
-  <mat-card class="stat-card green-gradient">
-    <mat-card-content>
-      <div class="stat-header">
-        <mat-icon>attach_money</mat-icon>
-        <span>Vendas Hoje</span>
+    <!-- Card 3: Vendas (Azul) -->
+    <mat-card class="stat-card type-sales">
+      <div class="card-icon-wrapper">
+        <mat-icon>receipt_long</mat-icon>
       </div>
-      <div class="stat-value">R$ 1.250</div>
-      <div class="stat-footer">45 Abastecimentos</div>
-    </mat-card-content>
-  </mat-card>
+      <div class="card-content">
+        <span class="stat-label">Operações Hoje</span>
+        <span class="stat-value">{{ stats.qtdAbastecimentos }}</span>
+        <span class="stat-footer">Abastecimentos</span>
+      </div>
+    </mat-card>
+
+    <!-- Card 4: Faturamento (Verde) -->
+    <mat-card class="stat-card type-revenue">
+      <div class="card-icon-wrapper">
+        <mat-icon>payments</mat-icon>
+      </div>
+      <div class="card-content">
+        <span class="stat-label">Receita Bruta</span>
+        <span class="stat-value highlight">{{ stats.valorTotalVendas | currency : 'BRL' }}</span>
+        <span class="stat-footer">Total Acumulado</span>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- SEÇÃO DE ATALHOS RÁPIDOS -->
+  <div class="shortcuts-section">
+    <h2 class="section-title">Ações Rápidas</h2>
+
+    <div class="shortcuts-grid">
+      <!-- Botão Grande: Novo Abastecimento -->
+      <button
+        mat-flat-button
+        color="primary"
+        class="action-btn big-btn"
+        routerLink="/abastecimentos"
+      >
+        <mat-icon>add_circle</mat-icon>
+        <div class="btn-text">
+          <span class="title">Novo Abastecimento</span>
+          <span class="desc">Registrar venda manual</span>
+        </div>
+      </button>
+
+      <!-- Botão: Novo Cliente -->
+      <button mat-stroked-button class="action-btn" routerLink="/fidelidade">
+        <mat-icon class="btn-icon">person_add</mat-icon>
+        <span>Cadastrar Cliente</span>
+      </button>
+
+      <!-- Botão: Gerenciar Bombas (Adicionado para preencher e dar utilidade) -->
+      <button mat-stroked-button class="action-btn" routerLink="/bombas">
+        <mat-icon class="btn-icon">settings_remote</mat-icon>
+        <span>Gerenciar Bombas</span>
+      </button>
+    </div>
+  </div>
 </div>
-
-<br />
-
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Atalhos Rápidos</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>Selecione uma opção no menu lateral para começar.</p>
-    <button mat-raised-button color="primary">Novo Abastecimento</button>
-  </mat-card-content>
-</mat-card>

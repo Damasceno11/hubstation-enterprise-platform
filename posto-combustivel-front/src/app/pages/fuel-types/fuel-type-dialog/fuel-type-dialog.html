@@ -1,0 +1,50 @@
+<!-- Cabeçalho Customizado -->
+<div class="dialog-header">
+  <div class="icon-badge">
+    <mat-icon>{{ data ? 'edit' : 'add' }}</mat-icon>
+  </div>
+  <div class="header-text">
+    <h2 class="title">{{ data ? 'Editar' : 'Novo' }} Combustível</h2>
+    <p class="subtitle">Preencha os dados do produto</p>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <!-- Nome -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome do Combustível</mat-label>
+      <input
+        matInput
+        formControlName="nome"
+        placeholder="Ex: Gasolina Aditivada"
+        autocomplete="off"
+      />
+      <mat-icon matSuffix class="input-icon">local_gas_station</mat-icon>
+
+      @if (form.get('nome')?.hasError('required')) {
+      <mat-error>Nome é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Preço -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Preço por Litro</mat-label>
+      <span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" formControlName="precoLitro" placeholder="0.00" />
+
+      @if (form.get('precoLitro')?.hasError('min')) {
+      <mat-error>Valor inválido</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<!-- Ações -->
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button (click)="onCancel()" class="cancel-btn">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="onSave()" [disabled]="form.invalid">
+    <mat-icon>check</mat-icon>
+    Salvar
+  </button>
+</mat-dialog-actions>

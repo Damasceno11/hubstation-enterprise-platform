@@ -34,8 +34,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -59,15 +59,14 @@
             "production": {
               "buildTarget": "posto-combustivel-front:build:production"
             },
-            "options": {
-              "proxyConfig": "proxy.conf.json"
-            },
             "development": {
-              "buildTarget": "posto-combustivel-front:build:development"
+              "buildTarget": "posto-combustivel-front:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
         },
+
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },

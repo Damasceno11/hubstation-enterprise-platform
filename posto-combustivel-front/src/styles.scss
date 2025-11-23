@@ -69,15 +69,82 @@ body {
   gap: 10px;
 }
 
-/* Utilitário: Snackbars Customizadas */
+/* ============================================================
+   5. CUSTOMIZAÇÃO DE COMPONENTES (Sem !important)
+   ============================================================
+   Estratégia: Sobrescrever os Tokens CSS locais do Material Design
+*/
+
+/* --- ALERTS (SNACKBARS) --- */
+/* Ao definir as variáveis DENTRO da classe, o componente as consome nativamente */
+
 .success-snackbar {
-  --mdc-snackbar-container-color: #2e7d32; /* Verde escuro */
-  --mdc-snackbar-supporting-text-color: white;
-  --mat-snack-bar-button-color: white;
+  /* Sobrescreve a cor de fundo do container (Surface) */
+  --mdc-snackbar-container-color: #2e7d32;
+  /* Sobrescreve a cor do texto */
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  /* Sobrescreve a cor do botão de ação */
+  --mat-snack-bar-button-color: #ffffff;
 }
 
+/* Importante: O seletor abaixo garante que o estilo seja aplicado na estrutura interna do MDC */
+.success-snackbar .mdc-snackbar__surface {
+  background-color: var(--mdc-snackbar-container-color) !important;
+}
+.success-snackbar .mdc-snackbar__label {
+  color: var(--mdc-snackbar-supporting-text-color) !important;
+}
+
+/* Erro (Vermelho) */
 .error-snackbar {
-  --mdc-snackbar-container-color: #c62828; /* Vermelho escuro */
-  --mdc-snackbar-supporting-text-color: white;
-  --mat-snack-bar-button-color: white;
+  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffffff;
+}
+
+.error-snackbar .mdc-snackbar__surface {
+  background-color: var(--mdc-snackbar-container-color) !important;
+}
+.error-snackbar .mdc-snackbar__label {
+  color: var(--mdc-snackbar-supporting-text-color) !important;
+}
+
+/* --- BOTÕES DE AÇÃO NA TABELA --- */
+/* Usamos seletores específicos para aumentar a especificidade sem usar !important */
+
+/* Botão Editar (Primary) */
+.mat-mdc-icon-button.mat-primary {
+  /* Estado Normal: Fundo transparente, Ícone na cor primária do tema */
+
+  /* Estado Hover: Fundo suave, Ícone mantém a cor ou muda */
+  &:hover {
+    background-color: rgba(63, 81, 181, 0.1); /* Azul suave */
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+  }
+}
+
+/* Botão Excluir (Warn) */
+.mat-mdc-icon-button.mat-warn {
+  /* Estado Hover */
+  &:hover {
+    background-color: rgba(244, 67, 54, 0.1); /* Vermelho suave */
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+  }
+}
+
+td.mat-mdc-cell {
+  vertical-align: middle;
+
+  // Se tiver botões agrupados na célula de ações
+  .mat-mdc-icon-button + .mat-mdc-icon-button {
+    margin-left: 8px; // Espaço entre ícones
+  }
+}
+
+/* Correção de Layout para tabelas com botões */
+td.mat-mdc-cell {
+  /* Garante que os botões fiquem alinhados verticalmente */
+  vertical-align: middle;
 }

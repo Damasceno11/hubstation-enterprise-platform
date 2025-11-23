@@ -1,0 +1,102 @@
+// Variáveis HubStation
+$primary-blue: #1976d2;
+$primary-light: #e3f2fd;
+$text-primary: #37474f;
+$text-secondary: #78909c;
+
+:host {
+  display: block;
+  background: #fff;
+}
+
+// Header
+.dialog-header {
+  padding: 24px 24px 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+  .icon-badge {
+    width: 48px;
+    height: 48px;
+    background-color: #e8f5e9; // Verde Venda
+    color: #2e7d32;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .header-text {
+    .title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-primary;
+    }
+    .subtitle {
+      margin: 0;
+      font-size: 0.85rem;
+      color: $text-secondary;
+    }
+  }
+}
+
+// Form
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; // Compacto
+  padding-top: 24px;
+}
+
+.full-width {
+  width: 100%;
+  .input-icon {
+    color: #cfd8dc;
+  }
+  .prefix-bold {
+    font-weight: 600;
+    color: $text-primary;
+  }
+}
+
+// Grid de 2 colunas para Data/Litros
+.row-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+// Estilo do Option (Select)
+.pump-label {
+  font-weight: 500;
+}
+.fuel-info {
+  font-size: 0.8rem;
+  color: $text-secondary;
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  .tiny-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Footer
+.dialog-actions {
+  padding: 16px 24px 24px 24px;
+  .cancel-btn {
+    color: $text-secondary;
+  }
+}
