@@ -5,6 +5,7 @@ import br.com.damasceno.postodecombustivel.dto.ClienteCadastroDTO;
 import br.com.damasceno.postodecombustivel.dto.ClienteResponseDTO;
 import br.com.damasceno.postodecombustivel.dto.NotificacaoDTO;
 import br.com.damasceno.postodecombustivel.exception.BusinessException;
+import br.com.damasceno.postodecombustivel.exception.ResourceNotFoundException;
 import br.com.damasceno.postodecombustivel.mapper.ClienteMapper;
 import br.com.damasceno.postodecombustivel.model.Cliente;
 import br.com.damasceno.postodecombustivel.repository.ClienteRepository;
@@ -77,4 +78,42 @@ public class ClienteServiceImpl implements ClienteService {
     return repository.findAll().stream().map(mapper::toResponseDTO).collect(Collectors.toList());
 
   }
+
+  @Override
+  @Transactional
+  public ClienteResponseDTO update(Long id, ClienteCadastroDTO dto) {
+    log.info("Atualizando cliente ID: {}", id);
+
+    Cliente cliente = repository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+
+    repository.findByEmail(dto.email()).ifPresent(c -> {
+      if (!c.getId().equals(id)) {
+        throw new BusinessException("E-mail já utilizado por outro cliente.");
+      }
+    });
+
+    cliente.setNome(dto.nome());
+    cliente.setEmail(dto.email());
+    cliente.setCpf(dto.cpf().replaceAll("[^0-9]", "")); // Limpa CPF
+
+    return mapper.toResponseDTO(repository.save(cliente));
+  }
+
+  @Override
+  public void deleteById(Long id) {
+    log.info("Deletando cliente ID: {}", id);
+    if (!repository.existsById(id)) {
+      throw new ResourceNotFoundException("Cliente não encontrado");
+    }
+    try {
+      repository.deleteById(id);
+    } catch (Exception e) {
+      throw new BusinessException(
+          "Não é possível excluir este cliente pois ele possui histórico de abastecimentos.");
+    }
+  }
+
 }
+
+

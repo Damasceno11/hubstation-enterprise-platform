@@ -9,4 +9,8 @@ public interface ClienteService {
   ClienteResponseDTO cadastrar(ClienteCadastroDTO dto);
 
   List<ClienteResponseDTO> findAll();
+
+  ClienteResponseDTO update(Long id, ClienteCadastroDTO dto);
+
+  void deleteById(Long id);
 }

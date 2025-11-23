@@ -36,4 +36,17 @@ public class ClienteController {
     return service.findAll();
   }
 
+  @PutMapping("/{id}")
+  @Operation(summary = "Atualiza dados de um cliente")
+  public ClienteResponseDTO update(@PathVariable Long id,
+      @Valid @RequestBody ClienteCadastroDTO dto) {
+    return service.update(id, dto);
+  }
+
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @Operation(summary = "Remove um cliente (apenas se não tiver histórico)")
+  public void delete(@PathVariable Long id) {
+    service.deleteById(id);
+  }
 }
