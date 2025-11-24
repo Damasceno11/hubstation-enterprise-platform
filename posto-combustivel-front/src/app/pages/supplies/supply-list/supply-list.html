@@ -41,7 +41,7 @@
       <ng-container matColumnDef="bomba">
         <th mat-header-cell *matHeaderCellDef>Origem</th>
         <td mat-cell *matCellDef="let e">
-          <span class="pump-badge">{{ e.bomba?.nome }}</span>
+          <span class="pump-badge">{{ e.bomba?.nome || 'N/A' }}</span>
         </td>
       </ng-container>
 

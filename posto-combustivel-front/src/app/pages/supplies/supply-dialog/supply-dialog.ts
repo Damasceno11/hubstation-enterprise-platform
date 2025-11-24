@@ -41,7 +41,7 @@ export class SupplyDialog implements OnInit {
   form: FormGroup = this.fb.group({
     bombaId: [null, [Validators.required]],
     dataAbastecimento: [new Date(), [Validators.required]],
-    litragem: [null, [Validators.required, Validators.min(0.1)]],
+    valorTotal: [null, [Validators.required, Validators.min(1.0)]],
     cpfCliente: [''], // Opcional
   });
 

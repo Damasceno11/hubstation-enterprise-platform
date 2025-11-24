@@ -11,31 +11,26 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AbastecimentoMapper {
 
-    private final BombaCombustivelMapper bombaCombustivelMapper;
-    private final ClienteMapper clienteMapper;
+  private final BombaCombustivelMapper bombaCombustivelMapper;
+  private final ClienteMapper clienteMapper;
 
-    public Abastecimento toEntity(AbastecimentoRequestDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-        Abastecimento abastecimento = new Abastecimento();
-        abastecimento.setDataAbastecimento(dto.dataAbastecimento());
-        abastecimento.setLitragem(dto.litragem());
-        return abastecimento;
+  public Abastecimento toEntity(AbastecimentoRequestDTO dto) {
+    if (dto == null) {
+      return null;
     }
+    Abastecimento abastecimento = new Abastecimento();
+    abastecimento.setDataAbastecimento(dto.dataAbastecimento());
+    abastecimento.setLitragem(dto.valorTotal());
+    return abastecimento;
+  }
 
-    public AbastecimentoResponseDTO toResponseDTO(Abastecimento entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new AbastecimentoResponseDTO(
-                entity.getId(),
-                entity.getDataAbastecimento(),
-                entity.getLitragem(),
-                entity.getValorTotal(),
-                bombaCombustivelMapper.toResponseDto(entity.getBombaCombustivel()),
-                entity.getStatus(),
-                clienteMapper.toResponseDTO(entity.getCliente())
-                );
+  public AbastecimentoResponseDTO toResponseDTO(Abastecimento entity) {
+    if (entity == null) {
+      return null;
     }
+    return new AbastecimentoResponseDTO(entity.getId(), entity.getDataAbastecimento(),
+        entity.getLitragem(), entity.getValorTotal(),
+        bombaCombustivelMapper.toResponseDto(entity.getBombaCombustivel()), entity.getStatus(),
+        clienteMapper.toResponseDTO(entity.getCliente()));
+  }
 }

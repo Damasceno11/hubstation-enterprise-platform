@@ -8,15 +8,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record AbastecimentoRequestDTO(
-        @NotNull(message = "O iD da bomba de combustível não pode ser nulo")
-        Long bombaId,
+    @NotNull(message = "O iD da bomba de combustível não pode ser nulo") Long bombaId,
 
-        @NotNull(message = "A data não pode ser nula")
-        LocalDate dataAbastecimento,
+    @NotNull(message = "A data não pode ser nula") LocalDate dataAbastecimento,
 
-        @DecimalMin(value = "0.001", message = "Litragem deve ser positiva")
-        BigDecimal litragem,
+    @DecimalMin(value = "0.001", message = "Litragem deve ser positiva") BigDecimal valorTotal,
 
-        @CPF(message = "CPF inválido") // Opcional mas se vier, tem que ser válido
-        String cpfCliente
-) {}
+    @CPF(message = "CPF inválido") // Opcional mas se vier, tem que ser válido
+    String cpfCliente) {
+}

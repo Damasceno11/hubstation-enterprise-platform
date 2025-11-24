@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 public class AbastecimentoServiceImpl implements AbastecimentoService {
 
   private static final int LITRAGEM_SCALE = 3;
-  private static final int VALOR_TOTAL_SCALE = 2;
   private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
 
   private final AbastecimentoRepository abastecimentoRepository;
@@ -37,71 +36,60 @@ public class AbastecimentoServiceImpl implements AbastecimentoService {
   private final AbastecimentoMapper mapper;
   private final ClienteRepository clienteRepository;
 
-
   @Override
   @Transactional
   public AbastecimentoResponseDTO create(AbastecimentoRequestDTO requestDTO) {
-    log.info("Iniciando criação de abastecimento para bomba ID: {}", requestDTO.bombaId());
+    // Loga o valor financeiro recebido
+    log.info("Iniciando abastecimento na bomba ID: {} - Valor: R$ {}", requestDTO.bombaId(),
+        requestDTO.valorTotal());
 
+    // 1. Mapeamento inicial (DTO traz o Valor Total)
     Abastecimento abastecimento = mapper.toEntity(requestDTO);
-    abastecimento.setStatus(StatusAbastecimento.CONCLUIDO); // Define o status inicial
+    abastecimento.setStatus(StatusAbastecimento.CONCLUIDO);
 
-    BombaCombustivel bombaCombustivel = findBombaById(requestDTO.bombaId());
-    abastecimento.setBombaCombustivel(bombaCombustivel);
+    // 2. Busca e Associa a Bomba
+    BombaCombustivel bomba = findBombaById(requestDTO.bombaId());
+    abastecimento.setBombaCombustivel(bomba); // Nome do campo na entidade é 'bomba'
 
-    TipoCombustivel tipoCombustivel = bombaCombustivel.getTipoCombustivel();
+    // 3. Valida o Preço do Combustível
+    TipoCombustivel tipoCombustivel = bomba.getTipoCombustivel();
     BigDecimal precoLitro = tipoCombustivel.getPrecoLitro();
 
     if (precoLitro == null || precoLitro.compareTo(BigDecimal.ZERO) <= 0) {
-      log.warn("Falha ao criar abastecimento: Bomba ID {} não possui preço de combustível válido.",
-          bombaCombustivel.getId());
+      log.warn("Falha: Bomba ID {} tem combustível com preço inválido.", bomba.getId());
       throw new BusinessException(
           "O tipo de combustível associado à bomba não possui um preço válido.");
     }
 
-    calcularValores(abastecimento, precoLitro);
+    // 4. Lógica de Cálculo Inversa (Litros = Valor / Preço)
+    // Ex: R$ 50,00 / R$ 5,00 = 10 Litros
+    if (abastecimento.getValorTotal() != null
+        && abastecimento.getValorTotal().compareTo(BigDecimal.ZERO) > 0) {
+      BigDecimal litragemCalculada =
+          abastecimento.getValorTotal().divide(precoLitro, LITRAGEM_SCALE, ROUNDING_MODE);
 
-    // Vincular Cliente se existir
+      abastecimento.setLitragem(litragemCalculada);
+    } else {
+      throw new BusinessException("O valor total do abastecimento deve ser maior que zero.");
+    }
+
+    // 5. Vincula Cliente (Fidelidade) se CPF for informado
     if (requestDTO.cpfCliente() != null && !requestDTO.cpfCliente().isBlank()) {
       String cpfLimpo = requestDTO.cpfCliente().replaceAll("[^0-9]", "");
 
       clienteRepository.findByCpf(cpfLimpo).ifPresentOrElse(cliente -> {
         abastecimento.setCliente(cliente);
-        log.info("Abastecimento vinculado ao cliente com CPF: {}", cpfLimpo);
-      }, () -> log.info("CPF informado ({}) mas cliente não encontrado na base local.", cpfLimpo));
-
+        log.info("Abastecimento vinculado ao cliente: {} (CPF: {})", cliente.getNome(), cpfLimpo);
+      }, () -> log.info("CPF informado ({}) não encontrado. Abastecimento seguirá como anônimo.",
+          cpfLimpo));
     }
+
+    // 6. Salva e Retorna
     Abastecimento savedAbastecimento = abastecimentoRepository.save(abastecimento);
-    log.info("Abastecimento ID: {} criado com sucesso.", savedAbastecimento.getId());
+    log.info("Abastecimento ID: {} registrado com sucesso. Litragem calculada: {} L",
+        savedAbastecimento.getId(), savedAbastecimento.getLitragem());
 
     return mapper.toResponseDTO(savedAbastecimento);
-  }
-
-  private void calcularValores(Abastecimento abastecimento, BigDecimal precoLitro) {
-    boolean hasLitragem = abastecimento.getLitragem() != null
-        && abastecimento.getLitragem().compareTo(BigDecimal.ZERO) >= 0;
-    boolean hasValorTotal = abastecimento.getValorTotal() != null
-        && abastecimento.getValorTotal().compareTo(BigDecimal.ZERO) >= 0;
-
-    if (hasLitragem && hasValorTotal) {
-      throw new BusinessException("Forneça apenas a litragem ou o valor total, não ambos.");
-    }
-
-    if (!hasLitragem && !hasValorTotal) {
-      throw new BusinessException("É necessário fornecer a litragem ou o valor total.");
-    }
-
-    if (hasLitragem) {
-      BigDecimal valorCalculado = abastecimento.getLitragem().multiply(precoLitro)
-          .setScale(VALOR_TOTAL_SCALE, ROUNDING_MODE);
-      abastecimento.setValorTotal(valorCalculado);
-    }
-
-    else {
-      BigDecimal litragemCalculada =
-          abastecimento.getValorTotal().divide(precoLitro, LITRAGEM_SCALE, ROUNDING_MODE);
-      abastecimento.setLitragem(litragemCalculada);
-    }
   }
 
   @Override
@@ -126,28 +114,28 @@ public class AbastecimentoServiceImpl implements AbastecimentoService {
     Abastecimento abastecimento = findEntityById(id);
 
     if (abastecimento.getStatus() == StatusAbastecimento.CANCELADO) {
-      log.warn("Tentativa de cancelar abastecimento com ID: {} que já esta cancelado.", id);
+      log.warn("Tentativa de cancelar abastecimento ID: {} que já estava cancelado.", id);
       throw new BusinessException("Esse abastecimento já se encontra cancelado.");
-
     }
-    abastecimento.setStatus(StatusAbastecimento.CANCELADO);
 
+    abastecimento.setStatus(StatusAbastecimento.CANCELADO);
     Abastecimento abastecimentoCancelado = abastecimentoRepository.save(abastecimento);
+
     log.info("Abastecimento ID: {} cancelado com sucesso.", abastecimentoCancelado.getId());
 
     return mapper.toResponseDTO(abastecimentoCancelado);
   }
 
-  private Abastecimento findEntityById(long id) {
+  private Abastecimento findEntityById(Long id) {
     return abastecimentoRepository.findById(id).orElseThrow(() -> {
       log.warn("Abastecimento não encontrado com ID: {}", id);
       return new ResourceNotFoundException("Abastecimento não encontrado com ID: " + id);
     });
   }
 
-  private BombaCombustivel findBombaById(long id) {
+  private BombaCombustivel findBombaById(Long id) {
     return bombaRepository.findById(id).orElseThrow(() -> {
-      log.warn("Bomba de combustível não encontrada com ID: {}", id);
+      log.warn("Bomba não encontrada com ID: {}", id);
       return new ResourceNotFoundException("Bomba de combustível não encontrada com ID: " + id);
     });
   }
