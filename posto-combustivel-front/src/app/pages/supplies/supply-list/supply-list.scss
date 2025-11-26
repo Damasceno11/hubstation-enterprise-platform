@@ -14,7 +14,7 @@ $gray-text: #78909c;
 
 .page-container {
   padding: 24px;
-  max-width: 1400px; // Tabela larga precisa de espaço
+  max-width: 1400px;
   margin: 0 auto;
 
   .page-header {
@@ -65,14 +65,13 @@ $gray-text: #78909c;
     border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   }
 
-  // Linha Cancelada (Visual apagado)
+  // Linha Cancelada
   tr.row-cancelled {
     background-color: #fafafa;
     td {
       opacity: 0.6;
       text-decoration: line-through;
     }
-    // Exceção para a coluna de status (não risca e opacidade normal)
     td:nth-child(6) {
       text-decoration: none;
       opacity: 1;
@@ -83,7 +82,19 @@ $gray-text: #78909c;
     background-color: #f5f9ff;
   }
 
-  // --- Colunas Customizadas ---
+  // --- COLUNAS CUSTOMIZADAS ---
+
+  .transaction-id {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: $primary-blue;
+    background-color: rgba($primary-blue, 0.08);
+    padding: 4px 8px;
+    border-radius: 6px;
+    letter-spacing: -0.5px;
+  }
+
   .date-col {
     display: flex;
     align-items: center;
@@ -93,6 +104,11 @@ $gray-text: #78909c;
       font-size: 16px;
       width: 16px;
       height: 16px;
+    }
+    .date-text {
+      color: $text-primary;
+      font-weight: 500;
+      font-size: 0.9rem;
     }
   }
 
@@ -110,7 +126,6 @@ $gray-text: #78909c;
     color: $text-primary;
   }
 
-  // Badges de Status
   .status-badge {
     padding: 6px 12px;
     border-radius: 20px;
@@ -130,50 +145,59 @@ $gray-text: #78909c;
     }
   }
 
-  .locked-icon {
-    color: $text-secondary;
-    display: flex;
-    justify-content: flex-end;
-  }
+  // --- CORREÇÃO DA COLUNA AÇÕES ---
+  .col-actions {
+    // REMOVIDO: display: flex (isso quebrava a tabela)
 
-  .w-80 {
-    width: 80px;
-  }
-  .w-actions {
-    width: 100px;
-  }
-  .text-right {
+    // Alinhamento padrão de tabela
     text-align: right;
-    justify-content: flex-end;
+
+    // Padding para "empurrar" o conteúdo para a esquerda (longe da borda)
+    padding-right: 48px !important;
+
+    // Garante que o ícone fique centralizado verticalmente na linha
+    vertical-align: middle;
+
+    // Largura mínima
+    width: 120px;
+
+    // Ajuste para o ícone de cadeado seguir o mesmo alinhamento
+    .locked-icon {
+      display: inline-flex; // Importante para obedecer text-align
+      color: $text-secondary;
+    }
   }
 }
 
-// --- Soft Button (Cancelamento) ---
+// --- Botão de Cancelamento ---
 .soft-btn {
   width: 36px;
   height: 36px;
   border-radius: 8px;
   border: none;
-  display: flex;
+
+  // Isso é vital: inline-flex permite que o botão obedeça ao text-align: right da célula
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
   transition: all 0.2s ease;
 
-  mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-  }
-
   &.warn-btn {
     background-color: $red-bg;
-    color: $red-text; // Vermelho
+    color: $red-text;
 
     &:hover {
       background-color: darken($red-bg, 5%);
       transform: scale(1.05);
     }
+  }
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
   }
 }
 

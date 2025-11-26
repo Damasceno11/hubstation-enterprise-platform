@@ -63,6 +63,7 @@ public class AbastecimentoServiceImpl implements AbastecimentoService {
 
     // 4. Lógica de Cálculo Inversa (Litros = Valor / Preço)
     // Ex: R$ 50,00 / R$ 5,00 = 10 Litros
+
     if (abastecimento.getValorTotal() != null
         && abastecimento.getValorTotal().compareTo(BigDecimal.ZERO) > 0) {
       BigDecimal litragemCalculada =

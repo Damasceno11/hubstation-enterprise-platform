@@ -20,7 +20,7 @@ public class AbastecimentoMapper {
     }
     Abastecimento abastecimento = new Abastecimento();
     abastecimento.setDataAbastecimento(dto.dataAbastecimento());
-    abastecimento.setLitragem(dto.valorTotal());
+    abastecimento.setValorTotal(dto.valorTotal());
     return abastecimento;
   }
 

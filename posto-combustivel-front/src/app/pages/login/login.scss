@@ -1,4 +1,4 @@
-// Variáveis do Tema (Consistência com o resto do app)
+// Variáveis do Tema
 $primary-blue: #1976d2;
 $bg-page: #f5f7fa;
 $text-primary: #37474f;
@@ -10,7 +10,7 @@ $text-secondary: #78909c;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: $bg-page; // Fundo limpo
+  background-color: $bg-page;
   padding: 20px;
 
   // Marca acima do card
@@ -38,20 +38,20 @@ $text-secondary: #78909c;
 
 .login-card {
   width: 100%;
-  max-width: 400px; // Largura confortável
+  max-width: 400px;
   padding: 32px 24px;
   border-radius: 16px;
   background: #ffffff;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08); // Sombra moderna
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.02);
 
   // Cabeçalho do Card
   .custom-header {
     display: flex;
     flex-direction: column;
-    align-items: center; // Centraliza texto
+    align-items: center;
     margin-bottom: 24px;
-    padding: 0; // Remove padding padrão do Material se necessário
+    padding: 0;
 
     mat-card-title {
       font-size: 1.5rem;
@@ -76,7 +76,7 @@ $text-secondary: #78909c;
     }
   }
 
-  // Botão
+  // Botão e Ações
   .actions {
     margin-top: 16px;
 
@@ -87,11 +87,40 @@ $text-secondary: #78909c;
       font-size: 0.95rem;
       font-weight: 600;
       letter-spacing: 0.5px;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      // Remove padding padrão para o .btn-content controlar o espaço
+      padding: 0 !important;
 
       &:hover:not([disabled]) {
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba($primary-blue, 0.2);
+      }
+
+      .btn-content {
+        display: flex;
+        align-items: center; // Centraliza Verticalmente
+        justify-content: center; // Centraliza Horizontalmente
+        gap: 8px; // Espaço entre Texto e Seta
+        width: 100%;
+        height: 100%;
+        line-height: 1; // Reseta altura de linha para não entortar
+
+        // Ajuste no texto para ficar na mesma linha ótica do ícone
+        span {
+          display: block;
+          padding-top: 2px;
+        }
+
+        // Trava o tamanho do ícone para não estourar
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
     }
   }
@@ -102,28 +131,15 @@ $text-secondary: #78909c;
     padding-top: 24px;
     padding-bottom: 0;
 
-    .forgot-link {
+    .version {
       color: $text-secondary;
-      text-decoration: none;
       font-size: 0.85rem;
-      transition: color 0.2s;
-
-      &:hover {
-        color: $primary-blue;
-        text-decoration: underline;
-      }
+      opacity: 0.8;
     }
   }
 }
 
-// Rodapé da Página (Copyright)
-.page-footer {
-  margin-top: 40px;
-  color: #b0bec5;
-  font-size: 0.8rem;
-}
-
-// Loader Simples
+// Loader
 .spinner-mini {
   width: 18px;
   height: 18px;

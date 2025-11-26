@@ -7,6 +7,6 @@ export interface Supply {
   litragem: number;
   valorTotal: number;
   status: 'CONCLUIDO' | 'CANCELADO';
-  bomba: Pump;
+  bombaCombustivel: Pump;
   cliente?: Cliente;
 }

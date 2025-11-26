@@ -53,7 +53,12 @@ export class SupplyDialog implements OnInit {
 
   onSave() {
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value);
+      const payload = { ...this.form.value };
+
+      if (!payload.cpfCliente || payload.cpfCliente.trim() === '') {
+        payload.cpfCliente = null;
+      }
+      this.dialogRef.close(payload);
     }
   }
 
